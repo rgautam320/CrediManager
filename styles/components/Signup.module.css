@@ -10,15 +10,15 @@
     height: auto;
     width: 40%;
     margin: auto;
-    padding: 1.5rem 2.5rem;
+    padding: 1.5rem 2.5rem !important;
 }
 
 .form {
-    margin-top: 1rem;
+    margin-top: 1rem !important;
 }
 
 .inputbox {
-    margin: 1.25rem 0;
+    margin: 1.25rem 0 !important;
     position: relative;
 }
 
