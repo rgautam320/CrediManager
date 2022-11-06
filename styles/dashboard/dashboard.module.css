@@ -1,0 +1,28 @@
+.paper {
+    padding: 2rem 3rem;
+    margin-top: 2rem;
+}
+
+.box {
+    width: 40%;
+    margin: auto;
+}
+
+.form {
+    width: 100%;
+}
+
+.inputbox {
+    margin: 0.5rem 0;
+}
+
+.input {
+    width: 100%;
+}
+
+.submitButton {
+    margin-top: 1rem;
+    padding: 0.425rem 0;
+    width: 100%;
+    text-align: center;
+}

@@ -1,0 +1,10 @@
+.copyright {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 240px;
+    padding-bottom: 1rem;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}

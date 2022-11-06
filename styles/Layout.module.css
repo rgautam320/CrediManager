@@ -1,0 +1,43 @@
+.main {
+    display: flex;
+}
+
+.menuButton {
+    margin-right: 36px;
+}
+
+.dashboardText {
+    flex-grow: 1;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1px;
+}
+
+.title {
+    font: 700 2em "Ubuntu";
+    margin: 0 auto;
+    background: url(https://i.ibb.co/RDTnNrT/animated-text-fill.png) repeat-y;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleAnimation 30s linear infinite;
+}
+
+.content {
+    flex-grow: 1;
+    height: 100vh;
+    overflow: auto;
+}
+
+@keyframes titleAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}

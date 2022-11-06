@@ -1,0 +1,21 @@
+.title {
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    color: #ec5404;
+    font-family: "Roboto", serif;
+    text-shadow: 0.03em 0.03em 0 rgb(102, 109, 143);
+}
+
+.input-file {
+    display: none;
+}
+
+.input-file-label {
+    width: 100%;
+    border: 0.05rem solid rgb(199, 199, 199);
+    border-radius: 0.5rem;
+    padding: 1rem 0.75rem;
+    cursor: pointer;
+    color: rgb(122, 122, 122);
+}
