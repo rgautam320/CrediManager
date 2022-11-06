@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import styles from "../styles/components/Signup.module.css";
+
 import { Box, Typography, MenuItem, TextField, FormControl, InputLabel, Select, Button, Paper } from "@mui/material";
 
-import styles from "../styles/components/Signup.module.css";
 import { CrediContract } from "../utils/load";
 import { saveUser } from "../redux/reducer/user.reducer";
 
