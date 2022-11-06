@@ -1,20 +1,56 @@
 {
-  "name": "credi",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "12.3.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
-  },
-  "devDependencies": {
-    "eslint": "8.25.0",
-    "eslint-config-next": "12.3.1"
-  }
+    "name": "credi",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@devexpress/dx-react-chart": "^3.0.6",
+        "@devexpress/dx-react-chart-material-ui": "^3.0.6",
+        "@emotion/react": "^11.10.4",
+        "@emotion/styled": "^11.10.4",
+        "@mui/icons-material": "^5.10.9",
+        "@mui/material": "^5.10.10",
+        "@reduxjs/toolkit": "^1.8.6",
+        "chart.js": "^3.9.1",
+        "i": "^0.3.7",
+        "install": "^0.13.0",
+        "ipfs-api": "^26.1.2",
+        "ipfs-http-client": "^59.0.0",
+        "minimist": "^1.2.7",
+        "next": "12.3.1",
+        "npm": "^8.19.2",
+        "react": "18.2.0",
+        "react-chartjs-2": "^4.3.1",
+        "react-dom": "18.2.0",
+        "react-redux": "^8.0.4",
+        "react-toastify": "^9.0.8",
+        "sweetalert": "^2.1.2",
+        "web3": "^1.8.0",
+        "web3.storage": "^4.4.0"
+    },
+    "devDependencies": {
+        "assert": "^2.0.0",
+        "buffer": "^6.0.3",
+        "chai": "^4.1.2",
+        "chai-as-promised": "^7.1.1",
+        "chai-bignumber": "^2.0.2",
+        "crypto-browserify": "^3.12.0",
+        "eslint": "8.25.0",
+        "eslint-config-next": "12.3.1",
+        "https-browserify": "^1.0.0",
+        "lite-server": "^2.3.0",
+        "os-browserify": "^0.3.0",
+        "process": "^0.11.10",
+        "react-app-rewired": "^2.2.1",
+        "stream-browserify": "^3.0.0",
+        "stream-http": "^3.2.0",
+        "truffle": "5.0.2",
+        "truffle-contract": "3.0.6",
+        "url": "^0.11.0"
+    }
 }
