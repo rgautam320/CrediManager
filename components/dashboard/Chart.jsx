@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Paper } from "@mui/material";
-import { Doughnut } from "react-chartjs-2/dist";
+import { Doughnut } from "react-chartjs-2";
 
 import {
     Chart as ChartJS,
