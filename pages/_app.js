@@ -4,7 +4,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import "../styles/globals.css";
-import "../styles/common.css";
 
 import { store } from "../redux/store";
 import { Provider } from "react-redux";
