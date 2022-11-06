@@ -108,7 +108,7 @@ export const userReducer = createSlice({
         saveAdmins: (state, action) => {
             let users = [];
             action.payload.forEach((res) => {
-                state.admins.push({
+                users.push({
                     id: res.Id,
                     address: res.UserAddress,
                     firstName: res.FirstName,
