@@ -23,6 +23,8 @@ const AddProfessors = () => {
             dispatch(saveProfessorsUnderSchool(res));
 
             toast.success("Professors added successfully.");
+
+            setAccount(null);
         } catch (error) {
             console.log(error);
             toast.error("Something went wrong.");

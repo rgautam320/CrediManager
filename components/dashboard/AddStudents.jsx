@@ -32,6 +32,8 @@ const AddStudents = ({ action }) => {
             }
 
             toast.success("Students added successfully.");
+
+            setAccount(null);
         } catch (error) {
             console.log(error);
             toast.error("Something went wrong.");

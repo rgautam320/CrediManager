@@ -72,7 +72,17 @@ const Dashboard = () => {
                 }
 
                 toast.success(`${data?.role} registered successfully.`);
+
                 loadDashboardAdmin();
+
+                setData({
+                    account: undefined,
+                    firstName: undefined,
+                    lastName: undefined,
+                    username: undefined,
+                    email: undefined,
+                    role: "",
+                });
             } catch (error) {
                 toast.error("Something went wrong.");
                 console.log(error);
