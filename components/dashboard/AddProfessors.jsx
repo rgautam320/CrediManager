@@ -1,12 +1,13 @@
-import { Box, Button, FormControl, Grid, Paper, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-
-import { CrediContract } from "../../utils/load";
+import { useDispatch } from "react-redux";
 
 import styles from "../../styles/dashboard/dashboard.module.css";
+
+import { Box, Button, FormControl, Grid, Paper, TextField } from "@mui/material";
+
+import { CrediContract } from "../../utils/load";
 import { saveProfessorsUnderSchool } from "../../redux/reducer/user.reducer";
-import { useDispatch } from "react-redux";
 
 const AddProfessors = () => {
     const dispatch = useDispatch();
