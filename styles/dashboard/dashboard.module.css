@@ -13,7 +13,7 @@
 }
 
 .inputbox {
-    margin: 0.5rem 0;
+    margin: 0.55rem 0 !important;
 }
 
 .input {
@@ -21,8 +21,8 @@
 }
 
 .submitButton {
-    margin-top: 1rem;
-    padding: 0.425rem 0;
+    margin-top: 1.2rem !important;
+    padding: 0.425rem 0 !important;
     width: 100%;
     text-align: center;
 }

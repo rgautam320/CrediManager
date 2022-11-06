@@ -18,7 +18,7 @@
 }
 
 .title {
-    font: 700 2em "Ubuntu";
+    font: 700 2em "Ubuntu" !important;
     margin: 0 auto;
     background: url(https://i.ibb.co/RDTnNrT/animated-text-fill.png) repeat-y;
     -webkit-background-clip: text;

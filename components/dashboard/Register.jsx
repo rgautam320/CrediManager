@@ -1,7 +1,8 @@
 import React from "react";
-import { Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 
 import styles from "../../styles/dashboard/dashboard.module.css";
+
+import { Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 
 const Register = ({ data, onChange, onSubmit }) => {
     return (

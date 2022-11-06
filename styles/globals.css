@@ -24,7 +24,7 @@ body {
     width: 100%;
     border: 0.05rem solid rgb(199, 199, 199);
     border-radius: 0.5rem;
-    padding: 1rem 0.75rem;
+    padding: 1rem 0.75rem !important;
     cursor: pointer;
     color: rgb(122, 122, 122);
 }
