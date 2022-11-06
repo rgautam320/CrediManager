@@ -116,6 +116,7 @@ const UploadCertificate = ({ user, account, open, handleToggle }) => {
                                 {filePreview ? file.name : "Upload Certificate"}
                             </label>
                             <input
+                                key={file?.name}
                                 type="file"
                                 name="certificate"
                                 id="certificate"
