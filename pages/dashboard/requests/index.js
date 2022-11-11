@@ -93,7 +93,7 @@ const Requests = () => {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell sx={{ fontWeight: "bold" }}>S.N</TableCell>
-                                        <TableCell sx={{ fontWeight: "bold" }} align="center">
+                                        <TableCell sx={{ fontWeight: "bold" }} align="left">
                                             Is Approved
                                         </TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }} align="center">
@@ -107,7 +107,7 @@ const Requests = () => {
                                             <TableCell component="th" scope="row">
                                                 {ind + 1}
                                             </TableCell>
-                                            <TableCell align="center">
+                                            <TableCell align="left">
                                                 {req.isApproved === false ? "False" : "True"}
                                             </TableCell>
                                             <TableCell align="center">
@@ -155,7 +155,7 @@ const Requests = () => {
                                                 {req.isApproved === false ? "False" : "True"}
                                             </TableCell>
                                             <TableCell align="center">
-                                                <Button onClick={() => onView(req?.requestedTo)}>
+                                                <Button onClick={() => onView(req?.requestedBy)}>
                                                     <RemoveRedEye />
                                                 </Button>
                                             </TableCell>

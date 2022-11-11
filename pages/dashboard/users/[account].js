@@ -122,12 +122,10 @@ const Account = () => {
         if (account) {
             fetchUser(account);
         }
-        if (user?.role != "Company") {
-            checkStudent(account);
-        }
         if (account) {
             fetchDocuments(account, user?.role);
         }
+        checkStudent(account);
     }, [fetchUser, account, user?.role, checkStudent, fetchDocuments]);
 
     return (
