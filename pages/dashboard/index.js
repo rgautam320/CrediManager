@@ -11,7 +11,7 @@ import Chart from "../../components/dashboard/Chart";
 import Register from "../../components/dashboard/Register";
 import Profile from "../../components/dashboard/Profile";
 
-import { saveAdminDashboard } from "../../redux/reducer/user.reducer";
+import { saveAdminDashboard, saveCompanyRequests, saveStudentRequests } from "../../redux/reducer/user.reducer";
 import AddStudents from "../../components/dashboard/AddStudents";
 import ProfessorStudents from "../../components/dashboard/ProfessorStudents";
 import SchoolStudents from "../../components/dashboard/SchoolStudents";
@@ -56,20 +56,27 @@ const Dashboard = () => {
         setData({ ...data, [e.target.name]: e.target.value });
     };
 
+    const fetchRequests = useCallback(
+        async (acc, role) => {
+            if (role === "Company") {
+                var res = await CrediContract.methods.GetRequestsByCompany(acc).call();
+                dispatch(saveCompanyRequests(res));
+            } else if (role === "Student") {
+                var res = await CrediContract.methods.GetRequestsByStudent(acc).call();
+                dispatch(saveStudentRequests(res));
+            }
+        },
+        [dispatch]
+    );
+
     const onSubmit = async (e) => {
         e.preventDefault();
 
         if (data.firstName && data.lastName && data.username && data.email) {
             try {
-                if (data?.role === "Admin") {
-                    await CrediContract.methods
-                        .CreateAdmin(data.account, data.firstName, data.lastName, data.username, data.email, "Admin")
-                        .send({ from: localStorage.getItem("ACCOUNT") });
-                } else {
-                    await CrediContract.methods
-                        .CreateUser(data.account, data.firstName, data.lastName, data.username, data.email, data.role)
-                        .send({ from: localStorage.getItem("ACCOUNT") });
-                }
+                await CrediContract.methods
+                    .CreateUser(data.account, data.firstName, data.lastName, data.username, data.email, data.role)
+                    .send({ from: localStorage.getItem("ACCOUNT") });
 
                 toast.success(`${data?.role} registered successfully.`);
 
@@ -108,7 +115,8 @@ const Dashboard = () => {
     }, [dispatch]);
 
     const fetchDocuments = useCallback(async (acc) => {
-        var res = await CrediContract.methods.GetStudentCertificates(acc).call();
+        var res = await CrediContract.methods.GetCertificatesByStudent(acc).call();
+
         let resCertificates = [];
         res.forEach((ele) => {
             resCertificates.push({
@@ -128,10 +136,13 @@ const Dashboard = () => {
         if (user?.role === "Admin") {
             loadDashboardAdmin();
         }
-        if (user?.role == "Student") {
+        if (user?.role === "Student" && user?.address) {
             fetchDocuments(user?.address);
         }
-    }, [user?.role, loadDashboardAdmin, user?.address, fetchDocuments]);
+        if (user?.role === "Company" || (user?.role === "Student" && user?.address)) {
+            fetchRequests(user?.address, user?.role);
+        }
+    }, [user?.role, loadDashboardAdmin, user?.address, fetchDocuments, fetchRequests]);
 
     return (
         <>
@@ -215,6 +226,11 @@ const Dashboard = () => {
                                             uploadedByName={val?.uploadedByName}
                                         />
                                     ))}
+                                    {certificates?.length === 0 && (
+                                        <Box sx={{ mt: 2, width: "100%" }}>
+                                            <Typography align="center">No Certificates Available</Typography>
+                                        </Box>
+                                    )}
                                 </Grid>
                             </Box>
                         </>

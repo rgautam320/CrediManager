@@ -12,6 +12,7 @@ import {
     EmojiPeople,
     SupervisorAccount,
     AdminPanelSettings,
+    RequestPage,
 } from "@mui/icons-material";
 import { Box, ListSubheader, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 
@@ -75,6 +76,15 @@ export const MainListItems = () => {
                 </ListItemIcon>
                 <ListItemText primary="Companies" />
             </ListItemButton>
+
+            {(user?.role == "Company" || user?.role == "Student") && (
+                <ListItemButton onClick={() => router.push("/dashboard/requests")}>
+                    <ListItemIcon>
+                        <RequestPage />
+                    </ListItemIcon>
+                    <ListItemText primary="Requests" />
+                </ListItemButton>
+            )}
         </Box>
     );
 };

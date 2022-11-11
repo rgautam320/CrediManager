@@ -41,6 +41,8 @@ const Signup = () => {
 
                 var res = await CrediContract.methods.GetUserInformation(localStorage.getItem("ACCOUNT")).call();
                 const user = {
+                    id: res.Id,
+                    address: res.UserAddress,
                     firstName: res.FirstName,
                     lastName: res.LastName,
                     username: res.Username,
