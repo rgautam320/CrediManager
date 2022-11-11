@@ -15,6 +15,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import CertificateCard from "../../../components/Certificates/CertificateCard";
 import UploadCertificate from "../../../components/Certificates/UploadCertificate";
 
@@ -27,7 +28,7 @@ const Account = () => {
     const { studentsUnderSchool, studentsUnderProfessor, user } = useSelector((_) => _.user);
 
     const [open, setOpen] = useState(false);
-    const [certificates, setCertificates] = useState(null);
+    const [certificates, setCertificates] = useState([]);
     const [fetchedUser, setFetchedUser] = useState();
     const [valid, setValid] = useState(false);
 
@@ -49,9 +50,19 @@ const Account = () => {
     }, []);
 
     const fetchDocuments = useCallback(
-        async (acc) => {
+        async (acc, role) => {
             if (!open) {
-                var res = await CrediContract.methods.GetStudentCertificates(acc).call();
+                var res = [];
+                if (role === "Student") {
+                    res = await CrediContract.methods.GetCertificatesByStudent(acc).call();
+                } else if (role === "Company") {
+                    res = await CrediContract.methods.GetCertificatesCompany(acc, user?.address).call();
+                    if (res.length > 0) {
+                        setValid(true);
+                    }
+                } else if (role === "School" || role === "Professor") {
+                    res = await CrediContract.methods.GetCertificatesSchoolProfessor(acc, user?.address).call();
+                }
                 let resCertificates = [];
                 res.forEach((ele) => {
                     resCertificates.push({
@@ -67,8 +78,19 @@ const Account = () => {
                 setCertificates(resCertificates);
             }
         },
-        [open]
+        [open, user?.address]
     );
+
+    const requestCertificate = async () => {
+        try {
+            await CrediContract.methods.CreateRequest(account).send({ from: user?.address });
+
+            toast.success("Request for Certificate Successfully");
+        } catch (error) {
+            toast.error(error.message);
+            console.log(error);
+        }
+    };
 
     const checkStudent = useCallback(
         (acc) => {
@@ -103,8 +125,8 @@ const Account = () => {
         if (user?.role != "Company") {
             checkStudent(account);
         }
-        if (user?.role != "Company" && account) {
-            fetchDocuments(account);
+        if (account) {
+            fetchDocuments(account, user?.role);
         }
     }, [fetchUser, account, user?.role, checkStudent, fetchDocuments]);
 
@@ -119,6 +141,17 @@ const Account = () => {
                     <Typography variant="h3" className="title">
                         User Information
                     </Typography>
+
+                    {user?.role === "Company" && !valid && (
+                        <Box my={2}>
+                            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                                <Button onClick={requestCertificate} variant="contained" color="primary">
+                                    Request for Certificate
+                                </Button>
+                            </Box>
+                        </Box>
+                    )}
+
                     <TableContainer component={Paper} sx={{ mt: 4 }}>
                         <Table>
                             <TableHead>
@@ -203,7 +236,7 @@ const Account = () => {
                                             uploadedByName={val?.uploadedByName}
                                         />
                                     ))}
-                                    {certificates?.length == 0 && (
+                                    {certificates?.length === 0 && (
                                         <Box sx={{ mt: 2, width: "100%" }}>
                                             <Typography align="center">No Certificates Available</Typography>
                                         </Box>

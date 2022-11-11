@@ -13,6 +13,8 @@ const initialState = {
     studentsUnderSchool: [],
     professorsUnderSchool: [],
     adminDashboard: null,
+    companyRequests: [],
+    studentRequests: [],
 };
 
 export const userReducer = createSlice({
@@ -172,10 +174,49 @@ export const userReducer = createSlice({
         saveAdminDashboard: (state, action) => {
             state.adminDashboard = action.payload;
         },
+        saveCompanyRequests: (state, action) => {
+            let requests = [];
+            action.payload.forEach((ele) => {
+                if (ele?.RequestedBy !== "0x0000000000000000000000000000000000000000") {
+                    requests.push({
+                        requestId: ele.RequestId,
+                        isApproved: ele.IsApproved,
+                        requestedTo: ele.RequestedTo,
+                        requestedBy: ele.RequestedBy,
+                    });
+                }
+            });
+            state.companyRequests = requests;
+        },
+        saveStudentRequests: (state, action) => {
+            let requests = [];
+            action.payload.forEach((ele) => {
+                if (ele?.RequestedTo !== "0x0000000000000000000000000000000000000000") {
+                    requests.push({
+                        requestId: ele.RequestId,
+                        isApproved: ele.IsApproved,
+                        requestedTo: ele.RequestedTo,
+                        requestedBy: ele.RequestedBy,
+                    });
+                }
+            });
+            state.studentRequests = requests;
+        },
         clearUser: (state, action) => {
-            state.user = null;
             state.account = null;
-            state.contract = null;
+            state.user = null;
+            state.users = [];
+            state.students = [];
+            state.schools = [];
+            state.professors = [];
+            state.companies = [];
+            state.admins = [];
+            state.studentsUnderProfessor = [];
+            state.studentsUnderSchool = [];
+            state.professorsUnderSchool = [];
+            state.adminDashboard = null;
+            state.companyRequests = [];
+            state.studentRequests = [];
         },
     },
 });
@@ -195,6 +236,8 @@ export const {
     saveStudentsUnderSchool,
     saveProfessorsUnderSchool,
     saveAdminDashboard,
+    saveCompanyRequests,
+    saveStudentRequests,
 } = userReducer.actions;
 
 export default userReducer.reducer;

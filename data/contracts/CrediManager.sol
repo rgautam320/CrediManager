@@ -3,14 +3,10 @@ pragma solidity ^0.8.0;
 
 contract CrediManager
 {
-    address AppAddress;
-    uint256 AppValue;
-    bytes AppData;
-
-    address[] AdminList;
     address[] UserList;
     
-    uint256 UserCount;
+    uint8 UserCount;
+    uint8 RequestCount;
 
     struct User 
     {
@@ -44,7 +40,16 @@ contract CrediManager
         uint256 Student;
     }
 
+    struct Request 
+    {
+        uint8 RequestId;
+        address RequestedBy;
+        address RequestedTo;
+        bool IsApproved; 
+    }
+
     mapping(address => Certificate[]) private Certificates;
+    mapping(uint8 => Request) private Requests;
 
     mapping(address => User) private Users;
     mapping(string => address[]) private Designations;
@@ -53,19 +58,14 @@ contract CrediManager
     mapping(address => address[]) private SchoolProfessors;
     mapping(address => address[]) private ProfessorStudents;
 
-    constructor(address _userAddress, string memory _firstname, string memory _lastname, string memory _username, string memory _email, string memory _designation) 
+    constructor(address _address, string memory _firstname, string memory _lastname, string memory _username, string memory _email, string memory _designation) 
     payable 
     {
-        // Adding Info of Contract
-        AppAddress = msg.sender;
-        AppValue = msg.value;
-        AppData = msg.data;
-
         // Creating User
         UserCount++;
-        Users[_userAddress] = User({
+        Users[_address] = User({
             Id: UserCount,
-            UserAddress: _userAddress,
+            UserAddress: _address,
             FirstName: _firstname,
             LastName: _lastname,
             Username: _username,
@@ -74,40 +74,35 @@ contract CrediManager
             IsSet: true
         });
 
-        UserList.push(_userAddress);
-        Designations[_designation].push(_userAddress);
-
-        // Adding to Admin
-        AdminList.push(_userAddress);
+        UserList.push(_address);
+        Designations[_designation].push(_address);
     }
 
     // Events
     event AddUser(address _userAddress);
     event AddStudent(address _userAddress);
     event AddProfessor(address _userAddress);
-    event CerrificateUploaded(address _userAddress);
+    event Uploaded(address _userAddress);
+    event RequestCreated(address _companyAddress);
+    event RequestApproved(address _studentAddress);
 
-    // Modifiers
-    modifier NotUser(address _userAddress) 
+    // Private Functions Modifier
+    function _NotUser(address _userAddress) private view 
     {
         require(Users[_userAddress].IsSet == false, "User already created.");
-        _;
     }
-
-    modifier CheckRole(address _userAddress, string memory _designation) 
+    function _CheckRole(address _userAddress, string memory _designation) private view 
     {
-        bool result = false;
+        bool res = false;
         for (uint256 index = 0; index < Designations[_designation].length; index++) 
         {
             if (Designations[_designation][index] == _userAddress) {
-                result = true;
+                res = true;
             }
         }
-        require(result == true, "You can't perform this action.");
-        _;
+        require(res == true, "You can't perform this action.");
     }
-
-    modifier CheckSchoolOrProfessor(address _userAddress)
+    function _CheckSchoolProfessor(address _userAddress) private view
     {
         bool result = false;
         for (uint256 index = 0; index < Designations["School"].length; index++) 
@@ -123,6 +118,22 @@ contract CrediManager
             }
         }
         require(result == true, "You can't perform this action.");
+    }
+
+    // Modifiers
+    modifier NotUser(address _userAddress) 
+    {
+        _NotUser(_userAddress);
+        _;
+    }
+    modifier CheckRole(address _userAddress, string memory _designation) 
+    {
+        _CheckRole(_userAddress, _designation);
+        _;
+    }
+    modifier CheckSchoolOrProfessor(address _userAddress)
+    {
+        _CheckSchoolProfessor(_userAddress);
         _;
     }
 
@@ -136,31 +147,6 @@ contract CrediManager
     function CreateUser(address _userAddress, string memory _firstname, string memory _lastname, string memory _username, string memory _email, string memory _designation)
     public payable
     NotUser(_userAddress) 
-    {
-        if(!CompareStrings(_designation, "Admin"))
-        {
-            UserCount++;
-            Users[_userAddress] = User({
-                Id: UserCount,
-                UserAddress: _userAddress,
-                FirstName: _firstname,
-                LastName: _lastname,
-                Username: _username,
-                Email: _email,
-                Designation: _designation,
-                IsSet: true
-            });
-
-            UserList.push(_userAddress);
-            Designations[_designation].push(_userAddress);
-
-            emit AddUser(_userAddress);
-        }
-    }
-
-    function CreateAdmin (address _userAddress, string memory _firstname, string memory _lastname, string memory _username, string memory _email, string memory _designation) 
-    public payable 
-    NotUser(_userAddress) CheckRole(msg.sender, "Admin")
     {
         UserCount++;
         Users[_userAddress] = User({
@@ -350,14 +336,101 @@ contract CrediManager
             UploadedTime: block.timestamp
         }));
 
-        emit CerrificateUploaded(_uploaderAddress);
+        emit Uploaded(_uploaderAddress);
     }
 
-    function GetStudentCertificates (address _studentAddress)
+    function GetCertificatesByStudent (address _studentAddress)
     public view 
     CheckRole(_studentAddress, "Student")
     returns (Certificate[] memory certificates)
     {
         return Certificates[_studentAddress];
+    }
+    
+    function GetCertificatesSchoolProfessor (address _studentAddress, address _userAddress)
+    public view 
+    CheckRole(_studentAddress, "Student")
+    CheckSchoolOrProfessor(_userAddress)
+    returns (Certificate[] memory certificates)
+    {
+        return Certificates[_studentAddress];
+    }
+     
+    function GetCertificatesCompany (address _studentAddress, address _companyAddress)
+    public view 
+    CheckRole(_studentAddress, "Student")
+    CheckRole(_companyAddress, "Company")
+    returns (Certificate[] memory certificates)
+    {
+        for(uint8 i = 0; i < RequestCount; i++)
+        {
+            if(Requests[i].RequestedBy == _companyAddress && Requests[i].RequestedTo == _studentAddress && Requests[i].IsApproved == true)
+            {
+                return Certificates[_studentAddress];
+            }
+        }
+    }
+
+    function CreateRequest(address _studentAddress)
+    public payable 
+    CheckRole(_studentAddress, "Student")
+    CheckRole(msg.sender, "Company")
+    {
+        Requests[RequestCount] = Request ({
+            RequestId: RequestCount,
+            RequestedBy: msg.sender,
+            RequestedTo: _studentAddress,
+            IsApproved: false
+        });
+        RequestCount++;
+        emit RequestCreated(msg.sender);
+    }
+
+    function ApproveRequest(address _companyAddress, uint8 requestCount)
+    public payable 
+    CheckRole(msg.sender, "Student")
+    CheckRole(_companyAddress, "Company")
+    {        
+        if(Requests[requestCount].RequestedTo == msg.sender && Requests[requestCount].RequestedBy == _companyAddress)
+        {
+            Requests[requestCount].IsApproved = true;
+        }
+        emit RequestApproved(msg.sender);
+    }
+
+    function GetRequestsByCompany(address _companyAddress)
+    public view 
+    CheckRole(_companyAddress, "Company")
+    returns (Request[] memory)
+    {
+        uint8 j = 0;
+        Request[] memory requests = new Request[](RequestCount);
+        for(uint8 i = 0; i < RequestCount; i++)
+        {
+            if(Requests[i].RequestedBy == _companyAddress)
+            {
+                requests[j] = Requests[i];
+                j++;
+            }
+        }
+        return requests;
+    }
+
+    function GetRequestsByStudent(address _studentAddress)
+    public view 
+    CheckRole(_studentAddress, "Student")
+    returns (Request[] memory)
+    {
+        uint8 j = 0;
+        Request[] memory requests = new Request[](RequestCount);
+        for(uint8 i = 0; i < RequestCount; i++)
+        {
+            if(Requests[i].RequestedTo == _studentAddress)
+            {
+                requests[j] = Requests[i];
+                j++;
+            }
+        }
+        return requests;
     }
 }

@@ -5,13 +5,13 @@
 // export const CONTRACT_ADDRESS = Data.networks[5777].address;
 
 /* Remix */
-export const CONTRACT_ADDRESS = "0x7f84737335D4DC26555603431E7b6746Ae621b5b";
+export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 export const ABI = [
     {
         inputs: [
             {
                 internalType: "address",
-                name: "_userAddress",
+                name: "_address",
                 type: "address",
             },
             {
@@ -88,11 +88,37 @@ export const ABI = [
             {
                 indexed: false,
                 internalType: "address",
+                name: "_studentAddress",
+                type: "address",
+            },
+        ],
+        name: "RequestApproved",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "address",
+                name: "_companyAddress",
+                type: "address",
+            },
+        ],
+        name: "RequestCreated",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "address",
                 name: "_userAddress",
                 type: "address",
             },
         ],
-        name: "CerrificateUploaded",
+        name: "Uploaded",
         type: "event",
     },
     {
@@ -138,36 +164,29 @@ export const ABI = [
         inputs: [
             {
                 internalType: "address",
-                name: "_userAddress",
+                name: "_companyAddress",
                 type: "address",
             },
             {
-                internalType: "string",
-                name: "_firstname",
-                type: "string",
-            },
-            {
-                internalType: "string",
-                name: "_lastname",
-                type: "string",
-            },
-            {
-                internalType: "string",
-                name: "_username",
-                type: "string",
-            },
-            {
-                internalType: "string",
-                name: "_email",
-                type: "string",
-            },
-            {
-                internalType: "string",
-                name: "_designation",
-                type: "string",
+                internalType: "uint8",
+                name: "requestCount",
+                type: "uint8",
             },
         ],
-        name: "CreateAdmin",
+        name: "ApproveRequest",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_studentAddress",
+                type: "address",
+            },
+        ],
+        name: "CreateRequest",
         outputs: [],
         stateMutability: "payable",
         type: "function",
@@ -259,6 +278,184 @@ export const ABI = [
                 ],
                 internalType: "struct CrediManager.User[]",
                 name: "",
+                type: "tuple[]",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_studentAddress",
+                type: "address",
+            },
+        ],
+        name: "GetCertificatesByStudent",
+        outputs: [
+            {
+                components: [
+                    {
+                        internalType: "address",
+                        name: "UploadedFor",
+                        type: "address",
+                    },
+                    {
+                        internalType: "string",
+                        name: "CertificateName",
+                        type: "string",
+                    },
+                    {
+                        internalType: "string",
+                        name: "Description",
+                        type: "string",
+                    },
+                    {
+                        internalType: "address",
+                        name: "UploadedBy",
+                        type: "address",
+                    },
+                    {
+                        internalType: "string",
+                        name: "UploadedByName",
+                        type: "string",
+                    },
+                    {
+                        internalType: "string",
+                        name: "CertificateLink",
+                        type: "string",
+                    },
+                    {
+                        internalType: "uint256",
+                        name: "UploadedTime",
+                        type: "uint256",
+                    },
+                ],
+                internalType: "struct CrediManager.Certificate[]",
+                name: "certificates",
+                type: "tuple[]",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_studentAddress",
+                type: "address",
+            },
+            {
+                internalType: "address",
+                name: "_companyAddress",
+                type: "address",
+            },
+        ],
+        name: "GetCertificatesCompany",
+        outputs: [
+            {
+                components: [
+                    {
+                        internalType: "address",
+                        name: "UploadedFor",
+                        type: "address",
+                    },
+                    {
+                        internalType: "string",
+                        name: "CertificateName",
+                        type: "string",
+                    },
+                    {
+                        internalType: "string",
+                        name: "Description",
+                        type: "string",
+                    },
+                    {
+                        internalType: "address",
+                        name: "UploadedBy",
+                        type: "address",
+                    },
+                    {
+                        internalType: "string",
+                        name: "UploadedByName",
+                        type: "string",
+                    },
+                    {
+                        internalType: "string",
+                        name: "CertificateLink",
+                        type: "string",
+                    },
+                    {
+                        internalType: "uint256",
+                        name: "UploadedTime",
+                        type: "uint256",
+                    },
+                ],
+                internalType: "struct CrediManager.Certificate[]",
+                name: "certificates",
+                type: "tuple[]",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_studentAddress",
+                type: "address",
+            },
+            {
+                internalType: "address",
+                name: "_userAddress",
+                type: "address",
+            },
+        ],
+        name: "GetCertificatesSchoolProfessor",
+        outputs: [
+            {
+                components: [
+                    {
+                        internalType: "address",
+                        name: "UploadedFor",
+                        type: "address",
+                    },
+                    {
+                        internalType: "string",
+                        name: "CertificateName",
+                        type: "string",
+                    },
+                    {
+                        internalType: "string",
+                        name: "Description",
+                        type: "string",
+                    },
+                    {
+                        internalType: "address",
+                        name: "UploadedBy",
+                        type: "address",
+                    },
+                    {
+                        internalType: "string",
+                        name: "UploadedByName",
+                        type: "string",
+                    },
+                    {
+                        internalType: "string",
+                        name: "CertificateLink",
+                        type: "string",
+                    },
+                    {
+                        internalType: "uint256",
+                        name: "UploadedTime",
+                        type: "uint256",
+                    },
+                ],
+                internalType: "struct CrediManager.Certificate[]",
+                name: "certificates",
                 type: "tuple[]",
             },
         ],
@@ -376,52 +573,78 @@ export const ABI = [
         inputs: [
             {
                 internalType: "address",
-                name: "_studentAddress",
+                name: "_companyAddress",
                 type: "address",
             },
         ],
-        name: "GetStudentCertificates",
+        name: "GetRequestsByCompany",
         outputs: [
             {
                 components: [
                     {
-                        internalType: "address",
-                        name: "UploadedFor",
-                        type: "address",
-                    },
-                    {
-                        internalType: "string",
-                        name: "CertificateName",
-                        type: "string",
-                    },
-                    {
-                        internalType: "string",
-                        name: "Description",
-                        type: "string",
+                        internalType: "uint8",
+                        name: "RequestId",
+                        type: "uint8",
                     },
                     {
                         internalType: "address",
-                        name: "UploadedBy",
+                        name: "RequestedBy",
                         type: "address",
                     },
                     {
-                        internalType: "string",
-                        name: "UploadedByName",
-                        type: "string",
+                        internalType: "address",
+                        name: "RequestedTo",
+                        type: "address",
                     },
                     {
-                        internalType: "string",
-                        name: "CertificateLink",
-                        type: "string",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "UploadedTime",
-                        type: "uint256",
+                        internalType: "bool",
+                        name: "IsApproved",
+                        type: "bool",
                     },
                 ],
-                internalType: "struct CrediManager.Certificate[]",
-                name: "certificates",
+                internalType: "struct CrediManager.Request[]",
+                name: "",
+                type: "tuple[]",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_studentAddress",
+                type: "address",
+            },
+        ],
+        name: "GetRequestsByStudent",
+        outputs: [
+            {
+                components: [
+                    {
+                        internalType: "uint8",
+                        name: "RequestId",
+                        type: "uint8",
+                    },
+                    {
+                        internalType: "address",
+                        name: "RequestedBy",
+                        type: "address",
+                    },
+                    {
+                        internalType: "address",
+                        name: "RequestedTo",
+                        type: "address",
+                    },
+                    {
+                        internalType: "bool",
+                        name: "IsApproved",
+                        type: "bool",
+                    },
+                ],
+                internalType: "struct CrediManager.Request[]",
+                name: "",
                 type: "tuple[]",
             },
         ],
