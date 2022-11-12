@@ -27,7 +27,7 @@ const Dashboard = () => {
     const { account, user, adminDashboard } = useSelector((_) => _.user);
 
     const chartData = {
-        labels: ["Admin", "School", "Professor", "Company", "User"],
+        labels: ["Admin", "School", "Professor", "Company", "Student"],
         datasets: [
             {
                 backgroundColor: ["red", "blue", "yellow", "orange", "green"],
