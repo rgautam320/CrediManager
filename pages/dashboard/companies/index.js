@@ -29,6 +29,7 @@ const Companies = () => {
 
     const fetchCompanies = useCallback(async () => {
         var res = await CrediContract.methods.GetUsersByRole("Company").call();
+
         dispatch(saveCompanies(res));
     }, [dispatch]);
 

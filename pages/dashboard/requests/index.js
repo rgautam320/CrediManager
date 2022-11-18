@@ -14,13 +14,20 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
+import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { Approval, CheckCircle, HighlightOff, RemoveCircleOutline, RemoveRedEye } from "@mui/icons-material";
 
 import Layout from "../../../containers/Layout";
+import CrediBackdrop from "../../../components/Backdrop";
+
 import { CrediContract } from "../../../utils/load";
-import { saveCompanies, saveCompanyRequests, saveStudentRequests } from "../../../redux/reducer/user.reducer";
-import { toast } from "react-toastify";
+import {
+    saveCompanies,
+    saveCompanyRequests,
+    saveStudentRequests,
+    setLoading,
+} from "../../../redux/reducer/user.reducer";
 
 const Requests = () => {
     const dispatch = useDispatch();
@@ -30,6 +37,7 @@ const Requests = () => {
 
     const fetchCompanies = useCallback(async () => {
         var res = await CrediContract.methods.GetUsersByRole("Company").call();
+
         dispatch(saveCompanies(res));
     }, [dispatch]);
 
@@ -39,7 +47,9 @@ const Requests = () => {
 
     const approveRequest = async (add, id, isApproved) => {
         try {
+            dispatch(setLoading(true));
             await CrediContract.methods.ApproveRequest(add, id, isApproved).send({ from: user?.address });
+            dispatch(setLoading(false));
 
             toast.success("Request Processed Successfully");
 
@@ -51,7 +61,7 @@ const Requests = () => {
                 dispatch(saveStudentRequests(res));
             }
         } catch (error) {
-            toast.error(error.message);
+            toast.error("Something went wrong.");
             console.log(error);
         }
     };
@@ -82,6 +92,7 @@ const Requests = () => {
                 <title>CrediManager | Requests</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
+            <CrediBackdrop />
             <Layout>
                 <Typography variant="h3" className="title">
                     Requests

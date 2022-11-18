@@ -7,7 +7,7 @@ import styles from "../styles/components/Signup.module.css";
 import { Box, Typography, MenuItem, TextField, FormControl, InputLabel, Select, Button, Paper } from "@mui/material";
 
 import { CrediContract } from "../utils/load";
-import { saveUser } from "../redux/reducer/user.reducer";
+import { saveUser, setLoading } from "../redux/reducer/user.reducer";
 
 const Signup = () => {
     const dispatch = useDispatch();
@@ -28,6 +28,7 @@ const Signup = () => {
 
         if (data.firstName && data.lastName && data.username && data.email && data.role) {
             try {
+                dispatch(setLoading(true));
                 await CrediContract.methods
                     .CreateUser(
                         localStorage.getItem("ACCOUNT"),
@@ -40,6 +41,7 @@ const Signup = () => {
                     .send({ from: localStorage.getItem("ACCOUNT") });
 
                 var res = await CrediContract.methods.GetUserInformation(localStorage.getItem("ACCOUNT")).call();
+
                 const user = {
                     id: res.Id,
                     address: res.UserAddress,
@@ -53,9 +55,11 @@ const Signup = () => {
                     dispatch(saveUser(user));
                 }
                 toast.success("User registered successfully.");
+                dispatch(setLoading(false));
             } catch (error) {
                 toast.error("Something went wrong.");
                 console.log(error);
+                dispatch(setLoading(false));
             }
         }
     };

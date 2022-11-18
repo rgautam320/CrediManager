@@ -29,6 +29,7 @@ const Professors = () => {
 
     const fetchProfessors = useCallback(async () => {
         var res = await CrediContract.methods.GetUsersByRole("Professor").call();
+
         dispatch(saveProfessors(res));
     }, [dispatch]);
 

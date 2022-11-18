@@ -12,6 +12,7 @@ import styles from "../styles/index.module.css";
 import Hero from "../assets/hero.png";
 import { saveAccount, saveUser } from "../redux/reducer/user.reducer";
 import { CrediContract } from "../utils/load";
+import CrediBackdrop from "../components/Backdrop";
 
 const Index = () => {
     const router = useRouter();
@@ -71,6 +72,7 @@ const Index = () => {
                 <title>CrediManager | Home</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
+            <CrediBackdrop />
             <Container className={styles.mainContainer}>
                 <Box>
                     <Image src={Hero} alt="Hero" layout="fill" objectFit="cover" />

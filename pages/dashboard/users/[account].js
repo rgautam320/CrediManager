@@ -14,16 +14,19 @@ import { Box } from "@mui/system";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import CrediBackdrop from "../../../components/Backdrop";
 import CertificateCard from "../../../components/Certificates/CertificateCard";
 import UploadCertificate from "../../../components/Certificates/UploadCertificate";
 
 import Layout from "../../../containers/Layout";
+import { setLoading } from "../../../redux/reducer/user.reducer";
 import { CrediContract } from "../../../utils/load";
 
 const Account = () => {
     const router = useRouter();
+    const dispatch = useDispatch();
 
     const { studentsUnderSchool, studentsUnderProfessor, user } = useSelector((_) => _.user);
 
@@ -83,11 +86,13 @@ const Account = () => {
 
     const requestCertificate = async () => {
         try {
+            dispatch(setLoading(true));
             await CrediContract.methods.CreateRequest(account).send({ from: user?.address });
+            dispatch(setLoading(false));
 
             toast.success("Request for Certificate Successfully");
         } catch (error) {
-            toast.error(error.message);
+            toast.error("Something went wrong.");
             console.log(error);
         }
     };
@@ -134,6 +139,7 @@ const Account = () => {
                 <title>CrediManager | Professors</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
+            <CrediBackdrop />
             <Layout>
                 <Box my={4}>
                     <Typography variant="h3" className="title">

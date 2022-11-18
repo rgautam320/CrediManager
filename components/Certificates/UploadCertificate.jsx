@@ -12,14 +12,18 @@ import {
     useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Web3Storage } from "web3.storage";
 import { toast } from "react-toastify";
 
 import CertificateCard from "./CertificateCard";
 import { CrediContract } from "../../utils/load";
+import { setLoading } from "../../redux/reducer/user.reducer";
+import CrediBackdrop from "../Backdrop";
 
 const UploadCertificate = ({ user, account, open, handleToggle }) => {
     const theme = useTheme();
+    const dispatch = useDispatch();
     const fullScreen = useMediaQuery(theme.breakpoints.down("lg"));
 
     const [file, setFile] = useState(null);
@@ -47,7 +51,8 @@ const UploadCertificate = ({ user, account, open, handleToggle }) => {
         }
 
         try {
-            toast.info("Certificate Uploading to IPFS");
+            handleToggle();
+            dispatch(setLoading(true));
             const client = new Web3Storage({
                 token: process.env.NEXT_PUBLIC_WEB3TOKEN,
             });
@@ -67,18 +72,20 @@ const UploadCertificate = ({ user, account, open, handleToggle }) => {
                 .send({ from: user?.address });
 
             toast.success("Certificate Uploaded Successfully.");
+            dispatch(setLoading(false));
 
             setData({ name: "Marksheet", description: "" });
             setFilePreview();
-            handleToggle();
         } catch (error) {
             console.log(error);
-            toast.error(error.message);
+            toast.error("Something went wrong.");
+            dispatch(setLoading(false));
         }
     };
 
     return (
         <>
+            <CrediBackdrop />
             <Dialog open={open} fullScreen={fullScreen} onClose={handleToggle}>
                 <DialogTitle>
                     <Typography variant="h4" className="title" sx={{ paddingBottom: 2 }}>

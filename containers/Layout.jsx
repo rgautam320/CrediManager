@@ -54,7 +54,7 @@ const Layout = ({ children }) => {
     const [open, setOpen] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const { user, account, contract } = useSelector((_) => _.user);
+    const { user, account } = useSelector((_) => _.user);
 
     const toggleDrawer = () => {
         setOpen(!open);
