@@ -29,6 +29,7 @@ const Admin = () => {
 
     const fetchAdmins = useCallback(async () => {
         var res = await CrediContract.methods.GetUsersByRole("Admin").call();
+
         dispatch(saveAdmins(res));
     }, [dispatch]);
 

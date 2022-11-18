@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    loading: false,
     account: typeof window !== "undefined" ? window.localStorage.getItem("ACCOUNT") : null,
     user: null,
     users: [],
@@ -21,6 +22,9 @@ export const userReducer = createSlice({
     name: "user",
     initialState,
     reducers: {
+        setLoading: (state, action) => {
+            state.loading = action.payload;
+        },
         saveAccount: (state, action) => {
             state.account = action.payload;
         },
@@ -180,7 +184,7 @@ export const userReducer = createSlice({
                 if (ele?.RequestedBy !== "0x0000000000000000000000000000000000000000") {
                     requests.push({
                         requestId: ele.RequestId,
-                        isApproved: ele.IsApproved,
+                        currentStatus: ele.CurrentStatus,
                         requestedTo: ele.RequestedTo,
                         requestedBy: ele.RequestedBy,
                     });
@@ -194,7 +198,7 @@ export const userReducer = createSlice({
                 if (ele?.RequestedTo !== "0x0000000000000000000000000000000000000000") {
                     requests.push({
                         requestId: ele.RequestId,
-                        isApproved: ele.IsApproved,
+                        currentStatus: ele.CurrentStatus,
                         requestedTo: ele.RequestedTo,
                         requestedBy: ele.RequestedBy,
                     });
@@ -222,6 +226,7 @@ export const userReducer = createSlice({
 });
 
 export const {
+    setLoading,
     saveContract,
     saveAccount,
     saveUser,

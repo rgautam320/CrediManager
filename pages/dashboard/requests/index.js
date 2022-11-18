@@ -14,13 +14,20 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
+import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { Approval, CheckCircle, CheckCircleOutline, RemoveRedEye } from "@mui/icons-material";
+import { Approval, CheckCircle, HighlightOff, RemoveCircleOutline, RemoveRedEye } from "@mui/icons-material";
 
 import Layout from "../../../containers/Layout";
+import CrediBackdrop from "../../../components/Backdrop";
+
 import { CrediContract } from "../../../utils/load";
-import { saveCompanies, saveCompanyRequests, saveStudentRequests } from "../../../redux/reducer/user.reducer";
-import { toast } from "react-toastify";
+import {
+    saveCompanies,
+    saveCompanyRequests,
+    saveStudentRequests,
+    setLoading,
+} from "../../../redux/reducer/user.reducer";
 
 const Requests = () => {
     const dispatch = useDispatch();
@@ -30,6 +37,7 @@ const Requests = () => {
 
     const fetchCompanies = useCallback(async () => {
         var res = await CrediContract.methods.GetUsersByRole("Company").call();
+
         dispatch(saveCompanies(res));
     }, [dispatch]);
 
@@ -37,11 +45,13 @@ const Requests = () => {
         router.push(`/dashboard/users/${account}`);
     };
 
-    const approveRequest = async (add, id) => {
+    const approveRequest = async (add, id, isApproved) => {
         try {
-            await CrediContract.methods.ApproveRequest(add, id).send({ from: user?.address });
+            dispatch(setLoading(true));
+            await CrediContract.methods.ApproveRequest(add, id, isApproved).send({ from: user?.address });
+            dispatch(setLoading(false));
 
-            toast.success("Request Approved Successfully");
+            toast.success("Request Processed Successfully");
 
             if (user?.role === "Company") {
                 var res = await CrediContract.methods.GetRequestsByCompany(user?.address).call();
@@ -51,7 +61,7 @@ const Requests = () => {
                 dispatch(saveStudentRequests(res));
             }
         } catch (error) {
-            toast.error(error.message);
+            toast.error("Something went wrong.");
             console.log(error);
         }
     };
@@ -82,6 +92,7 @@ const Requests = () => {
                 <title>CrediManager | Requests</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
+            <CrediBackdrop />
             <Layout>
                 <Typography variant="h3" className="title">
                     Requests
@@ -94,7 +105,7 @@ const Requests = () => {
                                     <TableRow>
                                         <TableCell sx={{ fontWeight: "bold" }}>S.N</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }} align="left">
-                                            Is Approved
+                                            Current Status
                                         </TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }} align="center">
                                             View
@@ -108,7 +119,11 @@ const Requests = () => {
                                                 {ind + 1}
                                             </TableCell>
                                             <TableCell align="left">
-                                                {req.isApproved === false ? "False" : "True"}
+                                                {req.currentStatus === "0"
+                                                    ? "Requested"
+                                                    : req.currentStatus === "1"
+                                                    ? "Approved"
+                                                    : "Rejected"}
                                             </TableCell>
                                             <TableCell align="center">
                                                 <Button onClick={() => onView(req?.requestedTo)}>
@@ -134,7 +149,7 @@ const Requests = () => {
                                     <TableRow>
                                         <TableCell sx={{ fontWeight: "bold" }}>S.N</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }} align="center">
-                                            Is Approved
+                                            Current Status
                                         </TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }} align="center">
                                             Company
@@ -152,7 +167,11 @@ const Requests = () => {
                                                 {ind + 1}
                                             </TableCell>
                                             <TableCell align="center">
-                                                {req.isApproved === false ? "False" : "True"}
+                                                {req.currentStatus === "0"
+                                                    ? "Requested"
+                                                    : req.currentStatus === "1"
+                                                    ? "Approved"
+                                                    : "Rejected"}
                                             </TableCell>
                                             <TableCell align="center">
                                                 <Button onClick={() => onView(req?.requestedBy)}>
@@ -160,17 +179,27 @@ const Requests = () => {
                                                 </Button>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <Button>
-                                                    {req.isApproved === false ? (
+                                                {req.currentStatus === "0" && (
+                                                    <>
                                                         <Approval
+                                                            titleAccess="Accept Request"
+                                                            color="primary"
                                                             onClick={() =>
-                                                                approveRequest(req.requestedBy, req.requestId)
+                                                                approveRequest(req.requestedBy, req.requestId, true)
                                                             }
                                                         />
-                                                    ) : (
-                                                        <CheckCircle />
-                                                    )}
-                                                </Button>
+                                                        &nbsp;
+                                                        <RemoveCircleOutline
+                                                            titleAccess="Reject Request"
+                                                            color="error"
+                                                            onClick={() =>
+                                                                approveRequest(req.requestedBy, req.requestId, false)
+                                                            }
+                                                        />
+                                                    </>
+                                                )}
+                                                {req.currentStatus === "1" && <CheckCircle color="primary" />}
+                                                {req.currentStatus === "2" && <HighlightOff color="error" />}
                                             </TableCell>
                                         </TableRow>
                                     ))}

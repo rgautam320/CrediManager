@@ -7,7 +7,7 @@ import styles from "../../styles/dashboard/dashboard.module.css";
 import { Box, Button, FormControl, Grid, Paper, TextField } from "@mui/material";
 
 import { CrediContract } from "../../utils/load";
-import { saveProfessorsUnderSchool } from "../../redux/reducer/user.reducer";
+import { saveProfessorsUnderSchool, setLoading } from "../../redux/reducer/user.reducer";
 
 const AddProfessors = () => {
     const dispatch = useDispatch();
@@ -17,7 +17,9 @@ const AddProfessors = () => {
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
+            dispatch(setLoading(true));
             await CrediContract.methods.AddProfessorInSchool(account).send({ from: localStorage.getItem("ACCOUNT") });
+            dispatch(setLoading(false));
 
             var res = await CrediContract.methods.GetProfessorsInSchool(localStorage.getItem("ACCOUNT")).call();
             dispatch(saveProfessorsUnderSchool(res));

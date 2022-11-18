@@ -28,3 +28,7 @@ body {
     cursor: pointer;
     color: rgb(122, 122, 122);
 }
+
+svg {
+    cursor: pointer;
+}

@@ -43,7 +43,7 @@ const CertificateCard = ({ certificateName, description, file, uploadedByName, i
                     {!isPreview && (
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
-                                {certificateName}
+                                {certificateName?.substring(0, 25)}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
                                 {description}

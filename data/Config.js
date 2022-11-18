@@ -57,71 +57,6 @@ export const ABI = [
         type: "event",
     },
     {
-        anonymous: false,
-        inputs: [
-            {
-                indexed: false,
-                internalType: "address",
-                name: "_userAddress",
-                type: "address",
-            },
-        ],
-        name: "AddStudent",
-        type: "event",
-    },
-    {
-        anonymous: false,
-        inputs: [
-            {
-                indexed: false,
-                internalType: "address",
-                name: "_userAddress",
-                type: "address",
-            },
-        ],
-        name: "AddUser",
-        type: "event",
-    },
-    {
-        anonymous: false,
-        inputs: [
-            {
-                indexed: false,
-                internalType: "address",
-                name: "_studentAddress",
-                type: "address",
-            },
-        ],
-        name: "RequestApproved",
-        type: "event",
-    },
-    {
-        anonymous: false,
-        inputs: [
-            {
-                indexed: false,
-                internalType: "address",
-                name: "_companyAddress",
-                type: "address",
-            },
-        ],
-        name: "RequestCreated",
-        type: "event",
-    },
-    {
-        anonymous: false,
-        inputs: [
-            {
-                indexed: false,
-                internalType: "address",
-                name: "_userAddress",
-                type: "address",
-            },
-        ],
-        name: "Uploaded",
-        type: "event",
-    },
-    {
         inputs: [
             {
                 internalType: "address",
@@ -133,6 +68,19 @@ export const ABI = [
         outputs: [],
         stateMutability: "payable",
         type: "function",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "address",
+                name: "_userAddress",
+                type: "address",
+            },
+        ],
+        name: "AddStudent",
+        type: "event",
     },
     {
         inputs: [
@@ -161,6 +109,19 @@ export const ABI = [
         type: "function",
     },
     {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "address",
+                name: "_userAddress",
+                type: "address",
+            },
+        ],
+        name: "AddUser",
+        type: "event",
+    },
+    {
         inputs: [
             {
                 internalType: "address",
@@ -171,6 +132,11 @@ export const ABI = [
                 internalType: "uint8",
                 name: "requestCount",
                 type: "uint8",
+            },
+            {
+                internalType: "bool",
+                name: "_approved",
+                type: "bool",
             },
         ],
         name: "ApproveRequest",
@@ -225,6 +191,83 @@ export const ABI = [
             },
         ],
         name: "CreateUser",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "address",
+                name: "_studentAddress",
+                type: "address",
+            },
+        ],
+        name: "RequestApproved",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "address",
+                name: "_companyAddress",
+                type: "address",
+            },
+        ],
+        name: "RequestCreated",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "address",
+                name: "_userAddress",
+                type: "address",
+            },
+        ],
+        name: "Uploaded",
+        type: "event",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_uploaderAddress",
+                type: "address",
+            },
+            {
+                internalType: "address",
+                name: "_receiverAddress",
+                type: "address",
+            },
+            {
+                internalType: "string",
+                name: "uploadedByName",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "certificateName",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "description",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "certificateLink",
+                type: "string",
+            },
+        ],
+        name: "UploadImages",
         outputs: [],
         stateMutability: "payable",
         type: "function",
@@ -597,9 +640,14 @@ export const ABI = [
                         type: "address",
                     },
                     {
-                        internalType: "bool",
-                        name: "IsApproved",
-                        type: "bool",
+                        internalType: "enum CrediManager.RequestStatus",
+                        name: "CurrentStatus",
+                        type: "uint8",
+                    },
+                    {
+                        internalType: "string",
+                        name: "RequestedByName",
+                        type: "string",
                     },
                 ],
                 internalType: "struct CrediManager.Request[]",
@@ -638,9 +686,14 @@ export const ABI = [
                         type: "address",
                     },
                     {
-                        internalType: "bool",
-                        name: "IsApproved",
-                        type: "bool",
+                        internalType: "enum CrediManager.RequestStatus",
+                        name: "CurrentStatus",
+                        type: "uint8",
+                    },
+                    {
+                        internalType: "string",
+                        name: "RequestedByName",
+                        type: "string",
                     },
                 ],
                 internalType: "struct CrediManager.Request[]",
@@ -893,44 +946,6 @@ export const ABI = [
             },
         ],
         stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "address",
-                name: "_uploaderAddress",
-                type: "address",
-            },
-            {
-                internalType: "address",
-                name: "_receiverAddress",
-                type: "address",
-            },
-            {
-                internalType: "string",
-                name: "uploadedByName",
-                type: "string",
-            },
-            {
-                internalType: "string",
-                name: "certificateName",
-                type: "string",
-            },
-            {
-                internalType: "string",
-                name: "description",
-                type: "string",
-            },
-            {
-                internalType: "string",
-                name: "certificateLink",
-                type: "string",
-            },
-        ],
-        name: "UploadImages",
-        outputs: [],
-        stateMutability: "payable",
         type: "function",
     },
 ];

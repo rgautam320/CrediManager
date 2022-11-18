@@ -8,6 +8,12 @@ contract CrediManager
     uint8 UserCount;
     uint8 RequestCount;
 
+    enum RequestStatus { 
+        Requested, 
+        Approved,
+        Rejected
+    }
+
     struct User 
     {
         uint256 Id;
@@ -45,7 +51,9 @@ contract CrediManager
         uint8 RequestId;
         address RequestedBy;
         address RequestedTo;
-        bool IsApproved; 
+        // bool IsApproved; 
+        RequestStatus CurrentStatus;
+        string RequestedByName;
     }
 
     mapping(address => Certificate[]) private Certificates;
@@ -171,18 +179,6 @@ contract CrediManager
     returns (User memory)
     {
         return Users[_userAddress];
-    }
-
-    function GetAllUsers() public view 
-    CheckRole(msg.sender, "Admin")
-    returns(User[] memory)
-    {
-        User[] memory users = new User[](UserCount);
-        for(uint8 i = 0; i < UserCount; i++)
-        {
-            users[i] = Users[UserList[i]];
-        }
-        return users;
     }
 
     function GetUsersByRole(string memory _designation) 
@@ -336,7 +332,7 @@ contract CrediManager
             UploadedTime: block.timestamp
         }));
 
-        emit Uploaded(_uploaderAddress);
+        emit Uploaded(_receiverAddress);
     }
 
     function GetCertificatesByStudent (address _studentAddress)
@@ -364,7 +360,7 @@ contract CrediManager
     {
         for(uint8 i = 0; i < RequestCount; i++)
         {
-            if(Requests[i].RequestedBy == _companyAddress && Requests[i].RequestedTo == _studentAddress && Requests[i].IsApproved == true)
+            if(Requests[i].RequestedBy == _companyAddress && Requests[i].RequestedTo == _studentAddress && Requests[i].CurrentStatus == RequestStatus.Approved)
             {
                 return Certificates[_studentAddress];
             }
@@ -380,22 +376,27 @@ contract CrediManager
             RequestId: RequestCount,
             RequestedBy: msg.sender,
             RequestedTo: _studentAddress,
-            IsApproved: false
+            CurrentStatus: RequestStatus.Requested,
+            RequestedByName: Users[msg.sender].FirstName
         });
         RequestCount++;
-        emit RequestCreated(msg.sender);
+        emit RequestCreated(_studentAddress);
     }
 
-    function ApproveRequest(address _companyAddress, uint8 requestCount)
+    function ApproveRequest(address _companyAddress, uint8 requestCount, bool _approved)
     public payable 
     CheckRole(msg.sender, "Student")
     CheckRole(_companyAddress, "Company")
     {        
         if(Requests[requestCount].RequestedTo == msg.sender && Requests[requestCount].RequestedBy == _companyAddress)
         {
-            Requests[requestCount].IsApproved = true;
+            if(_approved) {
+                Requests[requestCount].CurrentStatus = RequestStatus.Approved;
+            } else {
+                Requests[requestCount].CurrentStatus = RequestStatus.Rejected;
+            }
         }
-        emit RequestApproved(msg.sender);
+        emit RequestApproved(_companyAddress);
     }
 
     function GetRequestsByCompany(address _companyAddress)
