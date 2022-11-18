@@ -31,12 +31,6 @@ export const MainListItems = () => {
             </ListItemButton>
             {user?.role == "Admin" && (
                 <>
-                    <ListItemButton onClick={() => router.push("/dashboard/users")}>
-                        <ListItemIcon>
-                            <SupervisorAccount />
-                        </ListItemIcon>
-                        <ListItemText primary="Users" />
-                    </ListItemButton>
                     <ListItemButton onClick={() => router.push("/dashboard/admin")}>
                         <ListItemIcon>
                             <AdminPanelSettings />

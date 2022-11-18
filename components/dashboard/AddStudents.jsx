@@ -31,9 +31,9 @@ const AddStudents = ({ action }) => {
                 dispatch(saveStudentsUnderSchool(res));
             }
 
-            toast.success("Students added successfully.");
-
             setAccount(null);
+
+            toast.success("Students added successfully.");
         } catch (error) {
             console.log(error);
             toast.error("Something went wrong.");

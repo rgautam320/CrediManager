@@ -180,7 +180,7 @@ export const userReducer = createSlice({
                 if (ele?.RequestedBy !== "0x0000000000000000000000000000000000000000") {
                     requests.push({
                         requestId: ele.RequestId,
-                        isApproved: ele.IsApproved,
+                        currentStatus: ele.CurrentStatus,
                         requestedTo: ele.RequestedTo,
                         requestedBy: ele.RequestedBy,
                     });
@@ -194,7 +194,7 @@ export const userReducer = createSlice({
                 if (ele?.RequestedTo !== "0x0000000000000000000000000000000000000000") {
                     requests.push({
                         requestId: ele.RequestId,
-                        isApproved: ele.IsApproved,
+                        currentStatus: ele.CurrentStatus,
                         requestedTo: ele.RequestedTo,
                         requestedBy: ele.RequestedBy,
                     });
