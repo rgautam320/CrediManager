@@ -10,11 +10,6 @@ export const ABI = [
     {
         inputs: [
             {
-                internalType: "address",
-                name: "_address",
-                type: "address",
-            },
-            {
                 internalType: "string",
                 name: "_firstname",
                 type: "string",
@@ -32,11 +27,6 @@ export const ABI = [
             {
                 internalType: "string",
                 name: "_email",
-                type: "string",
-            },
-            {
-                internalType: "string",
-                name: "_designation",
                 type: "string",
             },
         ],
@@ -57,19 +47,6 @@ export const ABI = [
         type: "event",
     },
     {
-        inputs: [
-            {
-                internalType: "address",
-                name: "_professorAddress",
-                type: "address",
-            },
-        ],
-        name: "AddProfessorInSchool",
-        outputs: [],
-        stateMutability: "payable",
-        type: "function",
-    },
-    {
         anonymous: false,
         inputs: [
             {
@@ -81,6 +58,71 @@ export const ABI = [
         ],
         name: "AddStudent",
         type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "address",
+                name: "_userAddress",
+                type: "address",
+            },
+        ],
+        name: "AddUser",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "address",
+                name: "_studentAddress",
+                type: "address",
+            },
+        ],
+        name: "RequestApproved",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "address",
+                name: "_companyAddress",
+                type: "address",
+            },
+        ],
+        name: "RequestCreated",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "address",
+                name: "_userAddress",
+                type: "address",
+            },
+        ],
+        name: "Uploaded",
+        type: "event",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_professorAddress",
+                type: "address",
+            },
+        ],
+        name: "AddProfessorInSchool",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function",
     },
     {
         inputs: [
@@ -107,19 +149,6 @@ export const ABI = [
         outputs: [],
         stateMutability: "payable",
         type: "function",
-    },
-    {
-        anonymous: false,
-        inputs: [
-            {
-                indexed: false,
-                internalType: "address",
-                name: "_userAddress",
-                type: "address",
-            },
-        ],
-        name: "AddUser",
-        type: "event",
     },
     {
         inputs: [
@@ -193,138 +222,6 @@ export const ABI = [
         name: "CreateUser",
         outputs: [],
         stateMutability: "payable",
-        type: "function",
-    },
-    {
-        anonymous: false,
-        inputs: [
-            {
-                indexed: false,
-                internalType: "address",
-                name: "_studentAddress",
-                type: "address",
-            },
-        ],
-        name: "RequestApproved",
-        type: "event",
-    },
-    {
-        anonymous: false,
-        inputs: [
-            {
-                indexed: false,
-                internalType: "address",
-                name: "_companyAddress",
-                type: "address",
-            },
-        ],
-        name: "RequestCreated",
-        type: "event",
-    },
-    {
-        anonymous: false,
-        inputs: [
-            {
-                indexed: false,
-                internalType: "address",
-                name: "_userAddress",
-                type: "address",
-            },
-        ],
-        name: "Uploaded",
-        type: "event",
-    },
-    {
-        inputs: [
-            {
-                internalType: "address",
-                name: "_uploaderAddress",
-                type: "address",
-            },
-            {
-                internalType: "address",
-                name: "_receiverAddress",
-                type: "address",
-            },
-            {
-                internalType: "string",
-                name: "uploadedByName",
-                type: "string",
-            },
-            {
-                internalType: "string",
-                name: "certificateName",
-                type: "string",
-            },
-            {
-                internalType: "string",
-                name: "description",
-                type: "string",
-            },
-            {
-                internalType: "string",
-                name: "certificateLink",
-                type: "string",
-            },
-        ],
-        name: "UploadImages",
-        outputs: [],
-        stateMutability: "payable",
-        type: "function",
-    },
-    {
-        inputs: [],
-        name: "GetAllUsers",
-        outputs: [
-            {
-                components: [
-                    {
-                        internalType: "uint256",
-                        name: "Id",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "address",
-                        name: "UserAddress",
-                        type: "address",
-                    },
-                    {
-                        internalType: "string",
-                        name: "FirstName",
-                        type: "string",
-                    },
-                    {
-                        internalType: "string",
-                        name: "LastName",
-                        type: "string",
-                    },
-                    {
-                        internalType: "string",
-                        name: "Username",
-                        type: "string",
-                    },
-                    {
-                        internalType: "string",
-                        name: "Email",
-                        type: "string",
-                    },
-                    {
-                        internalType: "string",
-                        name: "Designation",
-                        type: "string",
-                    },
-                    {
-                        internalType: "bool",
-                        name: "IsSet",
-                        type: "bool",
-                    },
-                ],
-                internalType: "struct CrediManager.User[]",
-                name: "",
-                type: "tuple[]",
-            },
-        ],
-        stateMutability: "view",
         type: "function",
     },
     {
@@ -946,6 +843,44 @@ export const ABI = [
             },
         ],
         stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_uploaderAddress",
+                type: "address",
+            },
+            {
+                internalType: "address",
+                name: "_receiverAddress",
+                type: "address",
+            },
+            {
+                internalType: "string",
+                name: "uploadedByName",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "certificateName",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "description",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "certificateLink",
+                type: "string",
+            },
+        ],
+        name: "UploadImages",
+        outputs: [],
+        stateMutability: "payable",
         type: "function",
     },
 ];
