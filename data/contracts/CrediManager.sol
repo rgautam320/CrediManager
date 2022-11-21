@@ -66,24 +66,24 @@ contract CrediManager
     mapping(address => address[]) private SchoolProfessors;
     mapping(address => address[]) private ProfessorStudents;
 
-    constructor(address _address, string memory _firstname, string memory _lastname, string memory _username, string memory _email, string memory _designation) 
+    constructor(string memory _firstname, string memory _lastname, string memory _username, string memory _email) 
     payable 
     {
         // Creating User
         UserCount++;
-        Users[_address] = User({
+        Users[msg.sender] = User({
             Id: UserCount,
-            UserAddress: _address,
+            UserAddress: msg.sender,
             FirstName: _firstname,
             LastName: _lastname,
             Username: _username,
             Email: _email,
-            Designation: _designation,
+            Designation: "Admin",
             IsSet: true
         });
 
-        UserList.push(_address);
-        Designations[_designation].push(_address);
+        UserList.push(msg.sender);
+        Designations["Admin"].push(msg.sender);
     }
 
     // Events
