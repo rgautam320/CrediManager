@@ -5,7 +5,14 @@
 // export const CONTRACT_ADDRESS = Data.networks[5777].address;
 
 /* Remix */
-export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
+    ? process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
+    : "Your Contract Address";
+
+export const WEB3TOKEN = process.env.NEXT_PUBLIC_WEB3TOKEN
+    ? process.env.NEXT_PUBLIC_WEB3TOKEN
+    : "Your Web3.Storage Token";
+
 export const ABI = [
     {
         inputs: [
