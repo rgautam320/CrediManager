@@ -94,6 +94,7 @@ const Account = () => {
         } catch (error) {
             toast.error("Something went wrong.");
             console.log(error);
+            dispatch(setLoading(false));
         }
     };
 
