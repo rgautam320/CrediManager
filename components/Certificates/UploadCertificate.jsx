@@ -20,6 +20,7 @@ import CertificateCard from "./CertificateCard";
 import { CrediContract } from "../../utils/load";
 import { setLoading } from "../../redux/reducer/user.reducer";
 import CrediBackdrop from "../Backdrop";
+import { WEB3TOKEN } from "../../data/Config";
 
 const UploadCertificate = ({ user, account, open, handleToggle }) => {
     const theme = useTheme();
@@ -54,7 +55,7 @@ const UploadCertificate = ({ user, account, open, handleToggle }) => {
             handleToggle();
             dispatch(setLoading(true));
             const client = new Web3Storage({
-                token: process.env.NEXT_PUBLIC_WEB3TOKEN,
+                token: WEB3TOKEN,
             });
             const cid = await client.put([file]);
 
